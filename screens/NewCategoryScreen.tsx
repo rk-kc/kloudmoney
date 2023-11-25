@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateUserData } from '../data_layer/dataSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AddIcon, ChevronRightIcon, RemoveIcon } from '@gluestack-ui/themed';
 import {
@@ -28,7 +29,8 @@ import {
 
 const NewCategoryScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
-	const existingData = useSelector((state: any) => state.userData);
+	const dispatch = useDispatch();
+	const existingData = useSelector((state: any) => state.data.userData);
 
 	useEffect(() => {
 		console.log(existingData);
@@ -63,8 +65,17 @@ const NewCategoryScreen = () => {
 		setCategoryBreakdown(data);
 	};
 
+	const updateCategoryData = () => {
+		dispatch(
+			updateUserData({
+				categoryBreakdown: categoryBreakdown,
+			})
+		);
+	};
+
 	const onSaveButtonPress = () => {
 		/** TODO: Add actual function to save info here */
+		updateCategoryData();
 		navigation.navigate('SetBreakdownScreen');
 	};
 
