@@ -3,15 +3,14 @@ import { View } from 'react-native';
 import React from 'react';
 
 interface MainActionButtonProps {
-	// TODO: Add onPress props
-	// onPress: () => void;
+	onPress: () => void;
 	icon: any;
 	buttonText: string;
 }
 
 const MainActionButton = (props: MainActionButtonProps) => {
 	return (
-		<Button action="primary">
+		<Button action="primary" onPress={props.onPress}>
 			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 				<ButtonIcon as={props.icon} />
 				<View style={{ marginLeft: 20 }}>
