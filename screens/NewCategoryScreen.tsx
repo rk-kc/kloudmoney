@@ -1,32 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {
-	AddIcon,
-	AlertCircleIcon,
-	ChevronRightIcon,
-	RemoveIcon,
-} from '@gluestack-ui/themed';
+import { AddIcon, ChevronRightIcon, RemoveIcon } from '@gluestack-ui/themed';
 import {
 	Button,
 	ButtonIcon,
 	FormControl,
 	FormControlLabel,
 	FormControlLabelText,
-	FormControlHelper,
-	FormControlHelperText,
-	FormControlError,
-	FormControlErrorIcon,
-	FormControlErrorText,
 	Input,
 	InputField,
 	ScrollView,
 } from '@gluestack-ui/themed';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'twrnc';
 
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
+
+import { defaultStyle } from '../config/default_styles/styles';
 
 import {
 	CategoryBreakdownProps,
@@ -35,6 +28,12 @@ import {
 
 const NewCategoryScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
+	const existingData = useSelector((state: any) => state.userData);
+
+	useEffect(() => {
+		console.log(existingData);
+	}, []);
+
 	const [categoryBreakdown, setCategoryBreakdown] = useState<
 		CategoryBreakdownProps[]
 	>([
@@ -66,17 +65,21 @@ const NewCategoryScreen = () => {
 
 	const onSaveButtonPress = () => {
 		/** TODO: Add actual function to save info here */
-		navigation.navigate('NewSalaryScreen');
+		navigation.navigate('SetBreakdownScreen');
 	};
 
 	return (
-		<View style={tw`flex-1`}>
-			<ScreenHeader headerText="New Category" />
-			<View style={tw`items-center justify-center`}>
-				<ScrollView contentContainerStyle={tw`p-5`}>
+		<View style={tw`${defaultStyle.topView}`}>
+			<ScreenHeader
+				headerText="New Category"
+				backButtonVisible={true}
+				backAction={() => navigation.navigate('NewSalaryScreen')}
+			/>
+			<View style={tw`${defaultStyle.mainView}`}>
+				<ScrollView contentContainerStyle={tw`pb-3`}>
 					{categoryBreakdown.map((item, index) => {
 						return (
-							<View key={index} style={tw`p-2 flex-row bg-white`}>
+							<View key={index} style={tw`${defaultStyle.formFieldWithButton}`}>
 								<FormControl
 									size="lg"
 									isDisabled={false}
@@ -111,14 +114,14 @@ const NewCategoryScreen = () => {
 						);
 					})}
 				</ScrollView>
-				<View>
-					<MainActionButton
-						buttonText="Add Category"
-						icon={AddIcon}
-						onPress={addField}
-					/>
-				</View>
-				<View style={tw`top-140 absolute items-center justify-center`}>
+				{categoryBreakdown.length !== 5 && (
+					<View>
+						<Button action="secondary" onPress={addField}>
+							<ButtonIcon as={AddIcon} />
+						</Button>
+					</View>
+				)}
+				<View style={tw`${defaultStyle.mainActionButton}`}>
 					<MainActionButton
 						buttonText="Set Breakdown"
 						icon={ChevronRightIcon}
