@@ -12,6 +12,7 @@ import mainBackgroundImage from './assets/background.png';
 import NewSalaryScreen from './screens/NewSalaryScreen';
 import NewCategoryScreen from './screens/NewCategoryScreen';
 import SetBreakdownScreen from './screens/SetBreakdownScreen';
+import MainScreen from './screens/MainScreen';
 
 const navTheme = {
 	...DefaultTheme,
@@ -49,6 +50,11 @@ export default function App() {
 							<Stack.Screen
 								name="SetBreakdownScreen"
 								component={SetBreakdownScreen}
+								options={{ headerShown: false }}
+							/>
+							<Stack.Screen
+								name="MainScreen"
+								component={MainScreen}
 								options={{ headerShown: false }}
 							/>
 						</Stack.Navigator>

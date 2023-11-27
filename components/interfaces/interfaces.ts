@@ -2,6 +2,7 @@ export type NewScreenParamsList = {
 	NewSalaryScreen: undefined;
 	NewCategoryScreen: undefined;
 	SetBreakdownScreen: undefined;
+	MainScreen: undefined;
 };
 
 export interface ExpensesProps {

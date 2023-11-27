@@ -18,6 +18,9 @@ import {
 	InputField,
 	AlertCircleIcon,
 	CheckIcon,
+	useToast,
+	Toast,
+	ToastDescription,
 } from '@gluestack-ui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -31,6 +34,7 @@ import { defaultStyle } from '../config/default_styles/styles';
 const NewSalaryScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
 	const dispatch = useDispatch();
+	const toast = useToast();
 
 	const updateSalaryData = () => {
 		dispatch(
@@ -53,8 +57,28 @@ const NewSalaryScreen = () => {
 		setFinalDate(`${month}-${year}`);
 	};
 
+	const checkForEmptyAmount = () => {
+		if (amount == '') throw new Error('Amount cannot be empty.');
+		return;
+	};
+
 	const onSaveButtonPress = () => {
-		/** TODO: Add actual function to save info here */
+		try {
+			checkForEmptyAmount();
+		} catch (error: any) {
+			const errorMessage = 'Amount cannot be empty.';
+			toast.show({
+				placement: 'bottom',
+				render: ({ id }) => {
+					return (
+						<Toast nativeID={'toast-' + id} variant="solid" action="error">
+							<ToastDescription>{errorMessage}</ToastDescription>
+						</Toast>
+					);
+				},
+			});
+			return;
+		}
 		updateSalaryData();
 		navigation.navigate('NewCategoryScreen');
 	};

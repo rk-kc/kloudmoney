@@ -13,6 +13,9 @@ import {
 	Input,
 	InputField,
 	ScrollView,
+	useToast,
+	Toast,
+	ToastDescription,
 } from '@gluestack-ui/themed';
 import React, { useState, useEffect } from 'react';
 import tw from 'twrnc';
@@ -30,7 +33,7 @@ import {
 const NewCategoryScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
 	const dispatch = useDispatch();
-
+	const toast = useToast();
 	const [categoryBreakdown, setCategoryBreakdown] = useState<
 		CategoryBreakdownProps[]
 	>([
@@ -65,8 +68,32 @@ const NewCategoryScreen = () => {
 		dispatch(updateCategoryBreakdown(categoryBreakdown));
 	};
 
+	const checkForEmptyCategory = () => {
+		let data = categoryBreakdown;
+		data.forEach((obj: CategoryBreakdownProps) => {
+			if (obj.name === '') throw new Error('Category name cannot be empty.');
+		});
+		return;
+	};
+
 	const onSaveButtonPress = () => {
 		/** TODO: Add actual function to save info here */
+		try {
+			checkForEmptyCategory();
+		} catch (error: any) {
+			const errorMessage = 'Category name cannot be empty.';
+			toast.show({
+				placement: 'bottom',
+				render: ({ id }) => {
+					return (
+						<Toast nativeID={'toast-' + id} variant="solid" action="error">
+							<ToastDescription>{errorMessage}</ToastDescription>
+						</Toast>
+					);
+				},
+			});
+			return;
+		}
 		updateCategoryData();
 		navigation.navigate('SetBreakdownScreen');
 	};

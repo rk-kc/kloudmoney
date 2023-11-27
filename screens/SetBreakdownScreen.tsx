@@ -16,6 +16,7 @@ import {
 	FormControlLabelText,
 	useToast,
 	Toast,
+	ToastDescription,
 } from '@gluestack-ui/themed';
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
@@ -34,6 +35,7 @@ const SetBreakdownScreen = () => {
 	const salaryAmount = useSelector((state: any) => state.data.salaryAmount);
 	const monthYear = useSelector((state: any) => state.data.monthYear);
 	const dispatch = useDispatch();
+	const toast = useToast();
 
 	const [categoryBreakdown, setCategoryBreakdown] = useState<
 		CategoryBreakdownProps[]
@@ -60,16 +62,31 @@ const SetBreakdownScreen = () => {
 		});
 		const sum = percentageData.reduce((partialSum, a) => partialSum + a, 0);
 		if (sum !== 100)
-			throw new Error(
-				'Sum of percentage should not be greater or less than 100'
-			);
+			throw new Error('Sum of percentage cannot be greater or less than 100.');
+		return;
 	};
 
 	const onSaveButtonPress = () => {
 		/** TODO: Add actual function to save info here */
-		checkPercentageValue();
+		try {
+			checkPercentageValue();
+		} catch (error: any) {
+			const errorMessage =
+				'Sum of percentage cannot be greater or less than 100.';
+			toast.show({
+				placement: 'bottom',
+				render: ({ id }) => {
+					return (
+						<Toast nativeID={'toast-' + id} variant="solid" action="error">
+							<ToastDescription>{errorMessage}</ToastDescription>
+						</Toast>
+					);
+				},
+			});
+			return;
+		}
 		updateCategoryData();
-		navigation.navigate('NewSalaryScreen');
+		navigation.navigate('MainScreen');
 	};
 
 	return (
