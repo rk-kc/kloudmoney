@@ -1,7 +1,7 @@
-import { View } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserData } from '../data_layer/dataSlice';
+import { updateCategoryBreakdown } from '../data_layer/dataSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AddIcon, ChevronRightIcon, RemoveIcon } from '@gluestack-ui/themed';
 import {
@@ -30,11 +30,6 @@ import {
 const NewCategoryScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
 	const dispatch = useDispatch();
-	const existingData = useSelector((state: any) => state.data.userData);
-
-	useEffect(() => {
-		console.log(existingData);
-	}, []);
 
 	const [categoryBreakdown, setCategoryBreakdown] = useState<
 		CategoryBreakdownProps[]
@@ -66,11 +61,8 @@ const NewCategoryScreen = () => {
 	};
 
 	const updateCategoryData = () => {
-		dispatch(
-			updateUserData({
-				categoryBreakdown: categoryBreakdown,
-			})
-		);
+		// loop through the categoryBreakdown array and push the object
+		dispatch(updateCategoryBreakdown(categoryBreakdown));
 	};
 
 	const onSaveButtonPress = () => {
@@ -80,67 +72,75 @@ const NewCategoryScreen = () => {
 	};
 
 	return (
-		<View style={tw`${defaultStyle.topView}`}>
-			<ScreenHeader
-				headerText="New Category"
-				backButtonVisible={true}
-				backAction={() => navigation.navigate('NewSalaryScreen')}
-			/>
-			<View style={tw`${defaultStyle.mainView}`}>
-				<ScrollView contentContainerStyle={tw`pb-3`}>
-					{categoryBreakdown.map((item, index) => {
-						return (
-							<View key={index} style={tw`${defaultStyle.formFieldWithButton}`}>
-								<FormControl
-									size="lg"
-									isDisabled={false}
-									isInvalid={false}
-									isReadOnly={false}
-									isRequired={false}
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<View style={tw`${defaultStyle.topView}`}>
+				<ScreenHeader
+					headerText="New Category"
+					backButtonVisible={true}
+					backAction={() => navigation.navigate('NewSalaryScreen')}
+				/>
+				<View style={tw`${defaultStyle.mainView}`}>
+					<ScrollView contentContainerStyle={tw`pb-3`}>
+						{categoryBreakdown.map((item, index) => {
+							return (
+								<View
+									key={index}
+									style={tw`${defaultStyle.formFieldWithButton}`}
 								>
-									<FormControlLabel mb="$1">
-										<FormControlLabelText>
-											{`Category No.${index + 1}`}
-										</FormControlLabelText>
-									</FormControlLabel>
-									<Input variant="underlined">
-										<InputField
-											defaultValue=""
-											placeholder="Enter name"
-											onChangeText={(text: any) => {
-												let data = [...categoryBreakdown];
-												data[index].name = text;
-												setCategoryBreakdown(data);
-											}}
-											value={item.name}
-										/>
-									</Input>
-								</FormControl>
-								<View style={tw`mt-7 ml-10`}>
-									<Button action="secondary" onPress={() => removeField(index)}>
-										<ButtonIcon as={RemoveIcon} />
-									</Button>
+									<FormControl
+										size="lg"
+										isDisabled={false}
+										isInvalid={false}
+										isReadOnly={false}
+										isRequired={false}
+									>
+										<FormControlLabel mb="$1">
+											<FormControlLabelText>
+												{`Category No.${index + 1}`}
+											</FormControlLabelText>
+										</FormControlLabel>
+										<Input variant="underlined">
+											<InputField
+												defaultValue=""
+												placeholder="Enter name"
+												onChangeText={(text: any) => {
+													let data = [...categoryBreakdown];
+													data[index].name = text;
+													setCategoryBreakdown(data);
+												}}
+												value={item.name}
+											/>
+										</Input>
+									</FormControl>
+									<View style={tw`mt-7 ml-10`}>
+										<Button
+											action="secondary"
+											onPress={() => removeField(index)}
+										>
+											<ButtonIcon as={RemoveIcon} />
+										</Button>
+									</View>
 								</View>
-							</View>
-						);
-					})}
-				</ScrollView>
-				{categoryBreakdown.length !== 5 && (
-					<View>
-						<Button action="secondary" onPress={addField}>
-							<ButtonIcon as={AddIcon} />
-						</Button>
+							);
+						})}
+					</ScrollView>
+					{categoryBreakdown.length !== 5 && (
+						<View>
+							<Button action="secondary" onPress={addField}>
+								<ButtonIcon as={AddIcon} />
+							</Button>
+						</View>
+					)}
+					<View style={tw`${defaultStyle.mainActionButton}`}>
+						<MainActionButton
+							buttonText="Set Breakdown"
+							icon={ChevronRightIcon}
+							onPress={onSaveButtonPress}
+						/>
 					</View>
-				)}
-				<View style={tw`${defaultStyle.mainActionButton}`}>
-					<MainActionButton
-						buttonText="Set Breakdown"
-						icon={ChevronRightIcon}
-						onPress={onSaveButtonPress}
-					/>
 				</View>
 			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	);
 };
 

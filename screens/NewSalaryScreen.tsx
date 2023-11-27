@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import tw from 'twrnc';
 import { useDispatch } from 'react-redux';
 import { updateUserData } from '../data_layer/dataSlice';
@@ -37,8 +37,6 @@ const NewSalaryScreen = () => {
 			updateUserData({
 				monthYear: finalDate,
 				salaryAmount: parseInt(amount),
-				categoryBreakdown: [],
-				expenses: [],
 			})
 		);
 	};
@@ -67,79 +65,81 @@ const NewSalaryScreen = () => {
 	 */
 
 	return (
-		<View style={tw`${defaultStyle.topView}`}>
-			<ScreenHeader headerText="New Salary" backButtonVisible={false} />
-			<View style={tw`${defaultStyle.mainView}`}>
-				<View style={tw`${defaultStyle.formField}`}>
-					<FormControl
-						size="lg"
-						isDisabled={false}
-						isInvalid={false}
-						isReadOnly={false}
-						isRequired={false}
-					>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Amount</FormControlLabelText>
-						</FormControlLabel>
-						<Input variant="underlined">
-							<InputField
-								keyboardType="numeric"
-								defaultValue=""
-								placeholder="Ex. 500000"
-								onChangeText={(text) => setAmount(text)}
-								value={amount}
-							/>
-						</Input>
-						<FormControlHelper>
-							<FormControlHelperText>
-								Amount without any comma
-							</FormControlHelperText>
-						</FormControlHelper>
-						<FormControlError>
-							<FormControlErrorIcon as={AlertCircleIcon} />
-							<FormControlErrorText></FormControlErrorText>
-						</FormControlError>
-					</FormControl>
-				</View>
-				<View style={tw`${defaultStyle.formField}`}>
-					<FormControl
-						size="lg"
-						isDisabled={false}
-						isInvalid={false}
-						isReadOnly={false}
-						isRequired={false}
-					>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Date</FormControlLabelText>
-						</FormControlLabel>
-						<Input variant="underlined">
-							<DateTimePicker
-								testID="dateTimePicker"
-								value={date}
-								mode="date"
-								onChange={onChange}
-							/>
-						</Input>
-						<FormControlHelper>
-							<FormControlHelperText>
-								Date salary was received
-							</FormControlHelperText>
-						</FormControlHelper>
-						<FormControlError>
-							<FormControlErrorIcon as={AlertCircleIcon} />
-							<FormControlErrorText></FormControlErrorText>
-						</FormControlError>
-					</FormControl>
-				</View>
-				<View style={tw`${defaultStyle.mainActionButton}`}>
-					<MainActionButton
-						buttonText="Save"
-						icon={CheckIcon}
-						onPress={onSaveButtonPress}
-					/>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<View style={tw`${defaultStyle.topView}`}>
+				<ScreenHeader headerText="New Salary" backButtonVisible={false} />
+				<View style={tw`${defaultStyle.mainView}`}>
+					<View style={tw`${defaultStyle.formField}`}>
+						<FormControl
+							size="lg"
+							isDisabled={false}
+							isInvalid={false}
+							isReadOnly={false}
+							isRequired={false}
+						>
+							<FormControlLabel mb="$1">
+								<FormControlLabelText>Amount</FormControlLabelText>
+							</FormControlLabel>
+							<Input variant="underlined">
+								<InputField
+									keyboardType="numeric"
+									defaultValue=""
+									placeholder="Ex. 500000"
+									onChangeText={(text) => setAmount(text)}
+									value={amount}
+								/>
+							</Input>
+							<FormControlHelper>
+								<FormControlHelperText>
+									Amount without any comma
+								</FormControlHelperText>
+							</FormControlHelper>
+							<FormControlError>
+								<FormControlErrorIcon as={AlertCircleIcon} />
+								<FormControlErrorText></FormControlErrorText>
+							</FormControlError>
+						</FormControl>
+					</View>
+					<View style={tw`${defaultStyle.formField}`}>
+						<FormControl
+							size="lg"
+							isDisabled={false}
+							isInvalid={false}
+							isReadOnly={false}
+							isRequired={false}
+						>
+							<FormControlLabel mb="$1">
+								<FormControlLabelText>Date</FormControlLabelText>
+							</FormControlLabel>
+							<Input variant="underlined">
+								<DateTimePicker
+									testID="dateTimePicker"
+									value={date}
+									mode="date"
+									onChange={onChange}
+								/>
+							</Input>
+							<FormControlHelper>
+								<FormControlHelperText>
+									Date salary was received
+								</FormControlHelperText>
+							</FormControlHelper>
+							<FormControlError>
+								<FormControlErrorIcon as={AlertCircleIcon} />
+								<FormControlErrorText></FormControlErrorText>
+							</FormControlError>
+						</FormControl>
+					</View>
+					<View style={tw`${defaultStyle.mainActionButton}`}>
+						<MainActionButton
+							buttonText="Save"
+							icon={CheckIcon}
+							onPress={onSaveButtonPress}
+						/>
+					</View>
 				</View>
 			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	);
 };
 

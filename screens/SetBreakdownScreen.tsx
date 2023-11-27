@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import tw from 'twrnc';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUserData } from '../data_layer/dataSlice';
+import { updateCategoryBreakdown } from '../data_layer/dataSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CheckIcon } from '@gluestack-ui/themed';
 import {
@@ -14,7 +14,8 @@ import {
 	FormControl,
 	FormControlLabel,
 	FormControlLabelText,
-	ScrollView,
+	useToast,
+	Toast,
 } from '@gluestack-ui/themed';
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
@@ -27,22 +28,49 @@ import {
 import { defaultStyle } from '../config/default_styles/styles';
 const SetBreakdownScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
-	const existingData = useSelector((state: any) => state.data.userData);
+	const existingData = useSelector(
+		(state: any) => state.data.categoryBreakdown
+	);
+	const salaryAmount = useSelector((state: any) => state.data.salaryAmount);
+	const monthYear = useSelector((state: any) => state.data.monthYear);
+	const dispatch = useDispatch();
 
 	const [categoryBreakdown, setCategoryBreakdown] = useState<
 		CategoryBreakdownProps[]
-	>([
-		{
-			categoryId: '',
-			name: '',
-			percentage: 0,
-		},
-	]);
-	const [value, setValue] = useState(0);
+	>([]);
+
+	const formatter = new Intl.NumberFormat('ja-JP', {
+		style: 'currency',
+		currency: 'JPY',
+	});
 
 	useEffect(() => {
-		setCategoryBreakdown(existingData.categoryBreakdown);
+		setCategoryBreakdown(existingData);
 	}, []);
+
+	const updateCategoryData = () => {
+		// loop through the categoryBreakdown array and push the object
+		dispatch(updateCategoryBreakdown(categoryBreakdown));
+	};
+
+	const checkPercentageValue = () => {
+		let percentageData: number[] = [];
+		categoryBreakdown.forEach((obj: CategoryBreakdownProps) => {
+			percentageData.push(obj.percentage);
+		});
+		const sum = percentageData.reduce((partialSum, a) => partialSum + a, 0);
+		if (sum !== 100)
+			throw new Error(
+				'Sum of percentage should not be greater or less than 100'
+			);
+	};
+
+	const onSaveButtonPress = () => {
+		/** TODO: Add actual function to save info here */
+		checkPercentageValue();
+		updateCategoryData();
+		navigation.navigate('NewSalaryScreen');
+	};
 
 	return (
 		<View style={tw`${defaultStyle.topView}`}>
@@ -51,18 +79,38 @@ const SetBreakdownScreen = () => {
 				backAction={() => navigation.navigate('NewCategoryScreen')}
 				backButtonVisible={true}
 			/>
+			<View style={tw`${defaultStyle.salaryAmountView}`}>
+				<FormControlLabel mb="$1">
+					<FormControlLabelText>{`${monthYear}: ${formatter.format(
+						salaryAmount
+					)}`}</FormControlLabelText>
+				</FormControlLabel>
+			</View>
 			<View style={tw`${defaultStyle.mainView}`}>
 				{categoryBreakdown.map((item, index) => {
+					const handlePercentageChange = (value: number) => {
+						const data = [...categoryBreakdown];
+						data[index] = { ...data[index], percentage: value }; // Update the percentage
+						setCategoryBreakdown(data);
+					};
 					return (
 						<View key={index} style={tw`${defaultStyle.formFieldWithSlider}`}>
-							<FormControl size="lg">
+							<FormControl
+								size="lg"
+								isDisabled={false}
+								isInvalid={false}
+								isReadOnly={false}
+								isRequired={false}
+							>
 								<FormControlLabel mb="$3">
-									<FormControlLabelText>
-										{item.name} {`- ${value} %`}
-									</FormControlLabelText>
+									<FormControlLabelText>{`${item.name}: ${
+										item.percentage
+									}% | ${formatter.format(
+										(salaryAmount * item.percentage) / 100
+									)}`}</FormControlLabelText>
 								</FormControlLabel>
 								<Slider
-									value={value}
+									value={item.percentage}
 									size="md"
 									orientation="horizontal"
 									isDisabled={false}
@@ -71,7 +119,7 @@ const SetBreakdownScreen = () => {
 									maxValue={100}
 									step={1}
 									onChange={(value: number) => {
-										setValue(value);
+										handlePercentageChange(value);
 									}}
 								>
 									<SliderTrack>
@@ -88,7 +136,7 @@ const SetBreakdownScreen = () => {
 					<MainActionButton
 						buttonText="Save"
 						icon={CheckIcon}
-						onPress={() => navigation.navigate('NewCategoryScreen')}
+						onPress={onSaveButtonPress}
 					/>
 				</View>
 			</View>

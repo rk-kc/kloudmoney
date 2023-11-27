@@ -5,4 +5,5 @@ export const defaultStyle = {
 	formFieldWithButton: `bg-white p-2 m-1 w-70 rounded-5 border flex-row`,
 	formFieldWithSlider: `bg-white p-6 m-1 w-80 rounded-5 border justify-between`,
 	mainActionButton: `top-140 absolute`,
+	salaryAmountView: `items-center justify-center bg-white p-3 m-1 rounded-5 border justify-between`,
 };

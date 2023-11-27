@@ -4,8 +4,23 @@ export type NewScreenParamsList = {
 	SetBreakdownScreen: undefined;
 };
 
+export interface ExpensesProps {
+	expenseId: string;
+	category: string;
+	amount: number;
+	title: string;
+	description: string;
+}
+
 export interface CategoryBreakdownProps {
 	categoryId: string;
 	name: string;
 	percentage: number;
+}
+
+export interface UserData {
+	monthYear: string;
+	salaryAmount: number;
+	categoryBreakdown: CategoryBreakdownProps[];
+	expenses: ExpensesProps[];
 }
