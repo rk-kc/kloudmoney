@@ -3,6 +3,7 @@ export type NewScreenParamsList = {
 	NewCategoryScreen: undefined;
 	SetBreakdownScreen: undefined;
 	MainScreen: undefined;
+	NewExpenseScreen: undefined;
 };
 
 export interface ExpensesProps {

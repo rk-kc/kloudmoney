@@ -14,4 +14,5 @@ export const mainScreenStyle = {
 	supplementaryTextView: `items-center justify-center`,
 	breakdownView: `items-center justify-center m-5`,
 	individualBreakdownView: `bg-white w-65 justify-center items-center rounded-100 border mt-5 p-3`,
+	fabActionButtonView: `items-center justify-center mt-2`,
 };

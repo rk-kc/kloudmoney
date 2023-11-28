@@ -13,6 +13,7 @@ import NewSalaryScreen from './screens/NewSalaryScreen';
 import NewCategoryScreen from './screens/NewCategoryScreen';
 import SetBreakdownScreen from './screens/SetBreakdownScreen';
 import MainScreen from './screens/MainScreen';
+import NewExpenseScreen from './screens/NewExpenseScreen';
 
 const navTheme = {
 	...DefaultTheme,
@@ -55,6 +56,11 @@ export default function App() {
 							<Stack.Screen
 								name="MainScreen"
 								component={MainScreen}
+								options={{ headerShown: false }}
+							/>
+							<Stack.Screen
+								name="NewExpenseScreen"
+								component={NewExpenseScreen}
 								options={{ headerShown: false }}
 							/>
 						</Stack.Navigator>

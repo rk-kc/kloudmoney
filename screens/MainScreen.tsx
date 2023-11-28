@@ -1,18 +1,12 @@
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
-import {
-	Fab,
-	FabIcon,
-	FlatList,
-	Image,
-	MenuIcon,
-	Text,
-} from '@gluestack-ui/themed';
+import { FlatList, Image, Text } from '@gluestack-ui/themed';
 import React, { useState, useEffect } from 'react';
 import tw from 'twrnc';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultStyle, mainScreenStyle } from '../config/default_styles/styles';
 import SmartFinancialLogo from '../assets/SmartFinancialLogo.png';
 import { CategoryBreakdownProps } from '../components/interfaces/interfaces';
+import FloatingActionButton from '../components/FloatingActionButton';
 
 const MainScreen = () => {
 	const existingData = useSelector((state: any) => state.data);
@@ -96,11 +90,7 @@ const MainScreen = () => {
 					renderItem={renderItem}
 				/>
 			</View>
-			<View style={tw`flex-1`}>
-				<Fab size="lg" placement="bottom center" bg="$primary100">
-					<FabIcon as={MenuIcon} mr="$1" />
-				</Fab>
-			</View>
+			<FloatingActionButton />
 		</SafeAreaView>
 	);
 };
