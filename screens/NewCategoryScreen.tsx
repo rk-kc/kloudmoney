@@ -19,10 +19,13 @@ import {
 } from '@gluestack-ui/themed';
 import React, { useState, useEffect } from 'react';
 import tw from 'twrnc';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
 
+import { checkEmptyValues } from '../components/utils/utils';
 import { defaultStyle } from '../config/default_styles/styles';
 
 import {
@@ -68,18 +71,10 @@ const NewCategoryScreen = () => {
 		dispatch(updateCategoryBreakdown(categoryBreakdown));
 	};
 
-	const checkForEmptyCategory = () => {
-		let data = categoryBreakdown;
-		data.forEach((obj: CategoryBreakdownProps) => {
-			if (obj.name === '') throw new Error('Category name cannot be empty.');
-		});
-		return;
-	};
-
 	const onSaveButtonPress = () => {
 		/** TODO: Add actual function to save info here */
 		try {
-			checkForEmptyCategory();
+			checkEmptyValues(categoryBreakdown, true);
 		} catch (error: any) {
 			const errorMessage = 'Category name cannot be empty.';
 			toast.show({
@@ -133,6 +128,7 @@ const NewCategoryScreen = () => {
 												onChangeText={(text: any) => {
 													let data = [...categoryBreakdown];
 													data[index].name = text;
+													data[index].categoryId = uuidv4();
 													setCategoryBreakdown(data);
 												}}
 												value={item.name}

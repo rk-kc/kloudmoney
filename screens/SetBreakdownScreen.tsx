@@ -67,7 +67,6 @@ const SetBreakdownScreen = () => {
 	};
 
 	const onSaveButtonPress = () => {
-		/** TODO: Add actual function to save info here */
 		try {
 			checkPercentageValue();
 		} catch (error: any) {

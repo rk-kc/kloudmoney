@@ -26,3 +26,8 @@ export interface UserData {
 	categoryBreakdown: CategoryBreakdownProps[];
 	expenses: ExpensesProps[];
 }
+
+export interface CategorySelectionProps {
+	label: string;
+	value: string;
+}

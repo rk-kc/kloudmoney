@@ -21,9 +21,13 @@ export const dataSlice = createSlice({
 		updateCategoryBreakdown: (state, action) => {
 			state.categoryBreakdown = action.payload;
 		},
+		updateExpenses: (state, action) => {
+			state.expenses.push(action.payload);
+		},
 	},
 });
 
 // export actions
-export const { updateUserData, updateCategoryBreakdown } = dataSlice.actions;
+export const { updateUserData, updateCategoryBreakdown, updateExpenses } =
+	dataSlice.actions;
 export default dataSlice.reducer;
