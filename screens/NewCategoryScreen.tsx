@@ -72,7 +72,6 @@ const NewCategoryScreen = () => {
 	};
 
 	const onSaveButtonPress = () => {
-		/** TODO: Add actual function to save info here */
 		try {
 			checkEmptyValues(categoryBreakdown, true);
 		} catch (error: any) {

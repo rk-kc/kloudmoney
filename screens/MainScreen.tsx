@@ -7,6 +7,10 @@ import { defaultStyle, mainScreenStyle } from '../config/default_styles/styles';
 import SmartFinancialLogo from '../assets/SmartFinancialLogo.png';
 import { CategoryBreakdownProps } from '../components/interfaces/interfaces';
 import FloatingActionButton from '../components/FloatingActionButton';
+import {
+	calculateTotalExpensesByCategory,
+	calculateExpenseAmountByCategory,
+} from '../components/utils/utils';
 
 const MainScreen = () => {
 	const existingData = useSelector((state: any) => state.data);
@@ -22,15 +26,11 @@ const MainScreen = () => {
 	});
 
 	useEffect(() => {
-		console.log(existingData);
-	}, []);
+		console.log(calculateTotalExpensesByCategory(existingData));
+	}, [existingData]);
 
 	const calculateAmount = (amount: number, percentage: number) => {
 		return (amount * percentage) / 100;
-	};
-
-	const calculateRemainingAmount = (amount: number, expenses: number) => {
-		return amount - expenses;
 	};
 
 	const onMenuButtonPress = () => {
@@ -51,7 +51,7 @@ const MainScreen = () => {
 						</Text>
 						<Text color="$black">
 							{`${formatter.format(
-								calculateRemainingAmount(amount, 0)
+								calculateExpenseAmountByCategory(existingData, item.name)
 							)} / ${formatter.format(
 								calculateAmount(amount, item.percentage)
 							)}`}

@@ -40,6 +40,7 @@ import {
 	NewScreenParamsList,
 	CategorySelectionProps,
 	CategoryBreakdownProps,
+	ExpensesProps,
 } from '../components/interfaces/interfaces';
 import { defaultStyle } from '../config/default_styles/styles';
 import 'react-native-get-random-values';
@@ -81,19 +82,14 @@ const NewExpenseScreen = () => {
 		setExpenseId(uuidv4());
 	}, []);
 
-	const updateExpense = () => {
-		dispatch(
-			updateExpenses({
-				expenseId: expenseId,
-				category: category,
-				amount: amount,
-				title: name,
-				description: description,
-			})
-		);
-	};
-
 	const onSaveButtonPress = () => {
+		const expense: ExpensesProps = {
+			expenseId: expenseId,
+			category: category,
+			amount: parseFloat(amount),
+			title: name,
+			description: description,
+		};
 		try {
 			checkEmptyValues([
 				{
@@ -118,7 +114,7 @@ const NewExpenseScreen = () => {
 			});
 			return;
 		}
-		updateExpense();
+		dispatch(updateExpenses(expense));
 		navigation.navigate('MainScreen');
 	};
 

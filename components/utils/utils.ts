@@ -21,3 +21,51 @@ export function checkEmptyValues(
 	}
 	return true;
 }
+
+/**
+ * A generic function that takes in an object and calculates the sum of all the values
+ * in the expenses array for each category
+ */
+export function calculateTotalExpensesByCategory(
+	data: any
+): Record<string, number> {
+	const expenses = data.expenses;
+	const categoryBreakdown = data.categoryBreakdown;
+
+	const totalExpensesByCategory: Record<string, number> = {};
+
+	// Initialize total expenses for each category to 0
+	for (const category of categoryBreakdown) {
+		totalExpensesByCategory[category.name] = 0;
+	}
+
+	// Calculate total expenses per category
+	for (const expense of expenses) {
+		const category = expense.category;
+		const amount = expense.amount;
+
+		if (totalExpensesByCategory.hasOwnProperty(category)) {
+			totalExpensesByCategory[category] += amount;
+		} else {
+			totalExpensesByCategory[category] = amount;
+		}
+	}
+
+	return totalExpensesByCategory;
+}
+
+export function calculateExpenseAmountByCategory(
+	data: any,
+	categoryName: string
+): number {
+	const expenses = data.expenses;
+	let totalAmount = 0;
+
+	for (const expense of expenses) {
+		if (expense.category === categoryName) {
+			totalAmount += expense.amount;
+		}
+	}
+
+	return totalAmount;
+}
