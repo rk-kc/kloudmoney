@@ -15,6 +15,7 @@ import SetBreakdownScreen from './screens/SetBreakdownScreen';
 import MainScreen from './screens/MainScreen';
 import NewExpenseScreen from './screens/NewExpenseScreen';
 import ViewExpenseScreen from './screens/ViewExpenseScreen';
+import EditExpenseScreen from './screens/EditExpenseScreen';
 
 const navTheme = {
 	...DefaultTheme,
@@ -67,6 +68,11 @@ export default function App() {
 							<Stack.Screen
 								name="ViewExpenseScreen"
 								component={ViewExpenseScreen}
+								options={{ headerShown: false }}
+							/>
+							<Stack.Screen
+								name="EditExpenseScreen"
+								component={EditExpenseScreen}
 								options={{ headerShown: false }}
 							/>
 						</Stack.Navigator>

@@ -24,10 +24,31 @@ export const dataSlice = createSlice({
 		updateExpenses: (state, action) => {
 			state.expenses.push(action.payload);
 		},
+		deleteExpense: (state, action) => {
+			const expenseIndex = state.expenses.findIndex(
+				(expense) => expense.expenseId === action.payload
+			);
+			if (expenseIndex !== -1) {
+				state.expenses.splice(expenseIndex, 1);
+			}
+		},
+		updateSpecificExpense: (state, action) => {
+			const expenseIndex = state.expenses.findIndex(
+				(expense) => expense.expenseId === action.payload.expenseId
+			);
+			if (expenseIndex !== -1) {
+				state.expenses[expenseIndex] = action.payload;
+			}
+		},
 	},
 });
 
 // export actions
-export const { updateUserData, updateCategoryBreakdown, updateExpenses } =
-	dataSlice.actions;
+export const {
+	updateUserData,
+	updateCategoryBreakdown,
+	updateExpenses,
+	deleteExpense,
+	updateSpecificExpense,
+} = dataSlice.actions;
 export default dataSlice.reducer;

@@ -69,3 +69,12 @@ export function calculateExpenseAmountByCategory(
 
 	return totalAmount;
 }
+
+export const calculateAmount = (amount: number, percentage: number) => {
+	return (amount * percentage) / 100;
+};
+
+export const formatter = new Intl.NumberFormat('ja-JP', {
+	style: 'currency',
+	currency: 'JPY',
+});

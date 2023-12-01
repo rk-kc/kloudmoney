@@ -1,18 +1,25 @@
 import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { FlatList, Image, Text } from '@gluestack-ui/themed';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import tw from 'twrnc';
-import { useDispatch, useSelector } from 'react-redux';
-import { defaultStyle, mainScreenStyle } from '../config/default_styles/styles';
+import { useSelector } from 'react-redux';
+import { mainScreenStyle } from '../config/default_styles/styles';
 import SmartFinancialLogo from '../assets/SmartFinancialLogo.png';
-import { CategoryBreakdownProps } from '../components/interfaces/interfaces';
+import {
+	CategoryBreakdownProps,
+	NewScreenParamsList,
+} from '../components/interfaces/interfaces';
 import FloatingActionButton from '../components/FloatingActionButton';
 import {
-	calculateTotalExpensesByCategory,
+	calculateAmount,
 	calculateExpenseAmountByCategory,
+	formatter,
 } from '../components/utils/utils';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const MainScreen = () => {
+	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
 	const existingData = useSelector((state: any) => state.data);
 	const amount = useSelector((state: any) => state.data.salaryAmount);
 	const monthYear = useSelector((state: any) => state.data.monthYear);
@@ -20,26 +27,24 @@ const MainScreen = () => {
 		(state: any) => state.data.categoryBreakdown
 	);
 
-	const formatter = new Intl.NumberFormat('ja-JP', {
-		style: 'currency',
-		currency: 'JPY',
-	});
-
-	useEffect(() => {
-		console.log(calculateTotalExpensesByCategory(existingData));
-	}, [existingData]);
-
-	const calculateAmount = (amount: number, percentage: number) => {
-		return (amount * percentage) / 100;
-	};
-
-	const onMenuButtonPress = () => {
-		// TODO: Add modal to show the menu
-		console.log('Hello');
-	};
+	// useEffect(() => {
+	// 	console.log(calculateTotalExpensesByCategory(existingData));
+	// }, [existingData]);
 
 	const renderItem = ({ item }: any) => (
-		<TouchableOpacity onPress={() => console.log('Hello')}>
+		<TouchableOpacity
+			onPress={() => {
+				navigation.navigate('ViewExpenseScreen', {
+					monthYear: monthYear,
+					categoryName: item.name,
+					totalExpenses: calculateExpenseAmountByCategory(
+						existingData,
+						item.name
+					),
+					categoryAmount: calculateAmount(amount, item.percentage),
+				});
+			}}
+		>
 			<View style={tw`${mainScreenStyle.individualBreakdownView}`}>
 				<View style={tw`flex-row`}>
 					<Text color="$black" size="3xl" style={tw`pr-5 font-800`}>

@@ -4,7 +4,13 @@ export type NewScreenParamsList = {
 	SetBreakdownScreen: undefined;
 	MainScreen: undefined;
 	NewExpenseScreen: undefined;
-	ViewExpenseScreen: undefined;
+	ViewExpenseScreen: {
+		monthYear: string;
+		categoryName: string;
+		totalExpenses: number;
+		categoryAmount: number;
+	};
+	EditExpenseScreen: ExpensesProps;
 };
 
 export interface ExpensesProps {
