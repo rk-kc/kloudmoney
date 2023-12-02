@@ -3,6 +3,7 @@ import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import tw from 'twrnc';
 import { useDispatch } from 'react-redux';
 import { updateUserData } from '../data_layer/dataSlice';
+import { createAudit } from '../data_layer/auditDataSlice';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
@@ -27,20 +28,44 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
 
+import { checkEmptyValues } from '../components/utils/utils';
+import { AUDIT_MESSAGE, AUDIT_TITLE } from '../components/utils/constants';
+
 import { NewScreenParamsList } from '../components/interfaces/interfaces';
 
 import { defaultStyle } from '../config/default_styles/styles';
+
+import { v4 as uuidv4 } from 'uuid';
 
 const NewSalaryScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
 	const dispatch = useDispatch();
 	const toast = useToast();
 
+	const recordId = uuidv4();
+
 	const updateSalaryData = () => {
+		const salaryData = {
+			recordId: recordId,
+			monthYear: finalDate,
+			salaryAmount: parseInt(amount),
+		};
+		try {
+			dispatch(updateUserData(salaryData));
+		} catch (error) {
+			console.log(error);
+		}
 		dispatch(
-			updateUserData({
-				monthYear: finalDate,
-				salaryAmount: parseInt(amount),
+			createAudit({
+				relatedId: recordId,
+				auditData: [
+					{
+						createDate: new Date().toISOString(),
+						auditTitle: AUDIT_TITLE['newSalary'],
+						auditMessage: AUDIT_MESSAGE['newSalary'],
+						auditData: salaryData,
+					},
+				],
 			})
 		);
 	};
@@ -57,14 +82,9 @@ const NewSalaryScreen = () => {
 		setFinalDate(`${month}-${year}`);
 	};
 
-	const checkForEmptyAmount = () => {
-		if (amount == '') throw new Error('Amount cannot be empty.');
-		return;
-	};
-
 	const onSaveButtonPress = () => {
 		try {
-			checkForEmptyAmount();
+			checkEmptyValues([amount]);
 		} catch (error: any) {
 			const errorMessage = 'Amount cannot be empty.';
 			toast.show({

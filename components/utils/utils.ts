@@ -78,3 +78,11 @@ export const formatter = new Intl.NumberFormat('ja-JP', {
 	style: 'currency',
 	currency: 'JPY',
 });
+
+export const dateFormatter = (date: string) => {
+	const newDate = new Date(date);
+	return `${newDate.toLocaleDateString()} ${newDate.toLocaleTimeString([], {
+		hour: '2-digit',
+		minute: '2-digit',
+	})}`;
+};

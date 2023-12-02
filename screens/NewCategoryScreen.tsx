@@ -2,6 +2,7 @@ import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCategoryBreakdown } from '../data_layer/dataSlice';
+import { updateAuditData } from '../data_layer/auditDataSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AddIcon, ChevronRightIcon, RemoveIcon } from '@gluestack-ui/themed';
 import {
@@ -21,7 +22,7 @@ import React, { useState, useEffect } from 'react';
 import tw from 'twrnc';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-
+import { AUDIT_MESSAGE, AUDIT_TITLE } from '../components/utils/constants';
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
 
@@ -67,8 +68,19 @@ const NewCategoryScreen = () => {
 	};
 
 	const updateCategoryData = () => {
-		// loop through the categoryBreakdown array and push the object
-		dispatch(updateCategoryBreakdown(categoryBreakdown));
+		try {
+			dispatch(updateCategoryBreakdown(categoryBreakdown));
+		} catch (error) {
+			console.log(error);
+		}
+		dispatch(
+			updateAuditData({
+				createDate: new Date().toISOString(),
+				auditTitle: AUDIT_TITLE['newCategory'],
+				auditMessage: AUDIT_MESSAGE['newCategory'],
+				auditData: categoryBreakdown,
+			})
+		);
 	};
 
 	const onSaveButtonPress = () => {

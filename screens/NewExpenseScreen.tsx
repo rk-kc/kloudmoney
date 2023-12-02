@@ -3,7 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateExpenses } from '../data_layer/dataSlice';
+import { updateAuditData } from '../data_layer/auditDataSlice';
 import { checkEmptyValues } from '../components/utils/utils';
+import { AUDIT_MESSAGE, AUDIT_TITLE } from '../components/utils/constants';
 import {
 	FormControl,
 	FormControlLabel,
@@ -114,7 +116,19 @@ const NewExpenseScreen = () => {
 			});
 			return;
 		}
-		dispatch(updateExpenses(expense));
+		try {
+			dispatch(updateExpenses(expense));
+		} catch (error) {
+			console.log(error);
+		}
+		dispatch(
+			updateAuditData({
+				createDate: new Date().toISOString(),
+				auditTitle: AUDIT_TITLE['newExpense'],
+				auditMessage: AUDIT_MESSAGE['newExpense'],
+				auditData: expense,
+			})
+		);
 		navigation.navigate('MainScreen');
 	};
 

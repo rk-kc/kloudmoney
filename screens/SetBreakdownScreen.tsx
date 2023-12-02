@@ -4,6 +4,7 @@ import tw from 'twrnc';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCategoryBreakdown } from '../data_layer/dataSlice';
+import { updateAuditData } from '../data_layer/auditDataSlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CheckIcon } from '@gluestack-ui/themed';
 import {
@@ -20,7 +21,7 @@ import {
 } from '@gluestack-ui/themed';
 import ScreenHeader from '../components/ScreenHeader';
 import MainActionButton from '../components/MainActionButton';
-
+import { AUDIT_MESSAGE, AUDIT_TITLE } from '../components/utils/constants';
 import {
 	CategoryBreakdownProps,
 	NewScreenParamsList,
@@ -51,8 +52,19 @@ const SetBreakdownScreen = () => {
 	}, []);
 
 	const updateCategoryData = () => {
-		// loop through the categoryBreakdown array and push the object
-		dispatch(updateCategoryBreakdown(categoryBreakdown));
+		try {
+			dispatch(updateCategoryBreakdown(categoryBreakdown));
+		} catch (error) {
+			console.log(error);
+		}
+		dispatch(
+			updateAuditData({
+				createDate: new Date().toISOString(),
+				auditTitle: AUDIT_TITLE['setBreakdown'],
+				auditMessage: AUDIT_MESSAGE['setBreakdown'],
+				auditData: categoryBreakdown,
+			})
+		);
 	};
 
 	const checkPercentageValue = () => {

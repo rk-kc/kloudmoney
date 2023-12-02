@@ -31,13 +31,18 @@ const FloatingActionButton = () => {
 	};
 
 	const onNewExpenseButtonPress = () => {
-		// TODO: Add modal to show the menu
 		navigation.navigate('NewExpenseScreen');
 		handleClose();
 	};
 
-	const onMenuButtonPress = () => {
-		console.log('HEEEE');
+	const onViewAuditLogButtonPress = () => {
+		navigation.navigate('ViewAuditLogScreen');
+		handleClose();
+	};
+
+	const onManageSettingsButtonPress = () => {
+		navigation.navigate('ManageSettingsScreen');
+		handleClose();
 	};
 
 	return (
@@ -73,7 +78,7 @@ const FloatingActionButton = () => {
 						<MainActionButton
 							buttonText="View Audit Log"
 							icon={ClockIcon}
-							onPress={onMenuButtonPress}
+							onPress={onViewAuditLogButtonPress}
 						/>
 					</ActionsheetItem>
 					<ActionsheetItem
@@ -83,7 +88,7 @@ const FloatingActionButton = () => {
 						<MainActionButton
 							buttonText="Manage Settings"
 							icon={SettingsIcon}
-							onPress={onMenuButtonPress}
+							onPress={onManageSettingsButtonPress}
 						/>
 					</ActionsheetItem>
 				</ActionsheetContent>

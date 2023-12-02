@@ -11,6 +11,8 @@ export type NewScreenParamsList = {
 		categoryAmount: number;
 	};
 	EditExpenseScreen: ExpensesProps;
+	ViewAuditLogScreen: undefined;
+	ManageSettingsScreen: undefined;
 };
 
 export interface ExpensesProps {
@@ -28,6 +30,7 @@ export interface CategoryBreakdownProps {
 }
 
 export interface UserData {
+	recordId: string;
 	monthYear: string;
 	salaryAmount: number;
 	categoryBreakdown: CategoryBreakdownProps[];
@@ -37,4 +40,20 @@ export interface UserData {
 export interface CategorySelectionProps {
 	label: string;
 	value: string;
+}
+
+export interface AuditSummaryProps {
+	createDate: string;
+	auditTitle: string;
+	auditMessage: string;
+	auditData: any;
+}
+
+export interface AuditProps {
+	relatedId: string;
+	auditData: AuditSummaryProps[];
+}
+
+export interface AuditMessageProps {
+	[key: string]: string;
 }

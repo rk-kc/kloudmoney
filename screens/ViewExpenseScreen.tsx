@@ -22,6 +22,8 @@ import SmartFinancialLogo from '../assets/SmartFinancialLogo.png';
 import { mainScreenStyle } from '../config/default_styles/styles';
 import { formatter } from '../components/utils/utils';
 import { deleteExpense } from '../data_layer/dataSlice';
+import { updateAuditData } from '../data_layer/auditDataSlice';
+import { AUDIT_MESSAGE, AUDIT_TITLE } from '../components/utils/constants';
 import { useDispatch } from 'react-redux';
 
 type ViewExpenseScreenRouteProp = RouteProp<
@@ -63,7 +65,19 @@ const ViewExpenseScreen = ({ route }: ViewExpenseScreenProps) => {
 	};
 
 	const handleDeleteItem = (itemId: string) => {
-		dispatch(deleteExpense(itemId));
+		try {
+			dispatch(deleteExpense(itemId));
+		} catch (error) {
+			console.log(error);
+		}
+		dispatch(
+			updateAuditData({
+				createDate: new Date().toISOString(),
+				auditTitle: AUDIT_TITLE['deleteExpense'],
+				auditMessage: AUDIT_MESSAGE['deleteExpense'],
+				auditData: expenseData,
+			})
+		);
 	};
 
 	const showAmountSpentOverTotalAmount = () => {

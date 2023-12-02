@@ -8,6 +8,7 @@ import {
 export const dataSlice = createSlice({
 	name: 'data',
 	initialState: <UserData>{
+		recordId: '',
 		monthYear: '',
 		salaryAmount: 0,
 		categoryBreakdown: <CategoryBreakdownProps[]>[],
