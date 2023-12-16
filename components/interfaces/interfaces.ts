@@ -1,4 +1,5 @@
 export type NewScreenParamsList = {
+	NewAccountScreen: undefined;
 	NewSalaryScreen: undefined;
 	NewCategoryScreen: undefined;
 	SetBreakdownScreen: undefined;

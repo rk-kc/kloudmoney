@@ -9,6 +9,7 @@ import store from './data_layer/store';
 
 import mainBackgroundImage from './assets/background.png';
 
+import NewAccountScreen from './screens/NewAccountScreen';
 import NewSalaryScreen from './screens/NewSalaryScreen';
 import NewCategoryScreen from './screens/NewCategoryScreen';
 import SetBreakdownScreen from './screens/SetBreakdownScreen';
@@ -42,6 +43,11 @@ export default function App() {
 				>
 					<NavigationContainer theme={navTheme}>
 						<Stack.Navigator>
+							<Stack.Screen
+								name="NewAccountScreen"
+								component={NewAccountScreen}
+								options={{ headerShown: false }}
+							/>
 							<Stack.Screen
 								name="NewSalaryScreen"
 								component={NewSalaryScreen}

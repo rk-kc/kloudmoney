@@ -28,7 +28,7 @@ const MainScreen = () => {
 	);
 
 	// useEffect(() => {
-	// 	console.log(calculateTotalExpensesByCategory(existingData));
+	// 	console.log(existingData);
 	// }, [existingData]);
 
 	const renderItem = ({ item }: any) => (

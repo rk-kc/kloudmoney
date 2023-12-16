@@ -2,7 +2,8 @@ import { TouchableOpacity, View } from 'react-native';
 import { FlatList, Text } from '@gluestack-ui/themed';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 import tw from 'twrnc';
 import ScreenHeader from '../components/ScreenHeader';
 
@@ -11,6 +12,7 @@ import { NewScreenParamsList } from '../components/interfaces/interfaces';
 import { defaultStyle, mainScreenStyle } from '../config/default_styles/styles';
 const ManageSettingsScreen = () => {
 	const navigation = useNavigation<StackNavigationProp<NewScreenParamsList>>();
+	const existingData = useSelector((state: any) => state.data);
 	const data = [
 		{
 			name: 'Start New Month',
@@ -21,14 +23,16 @@ const ManageSettingsScreen = () => {
 			screen: 'NewSalaryScreen',
 		},
 		{
-			name: 'Change Breakdown',
-			screen: 'ChangeCategoryScreen',
-		},
-		{
 			name: 'Clear Data',
 			screen: 'ClearDataScreen',
 		},
 	];
+
+	useEffect(() => {
+		console.log(existingData.monthYear);
+		console.log(existingData.salaryAmount);
+		console.log(existingData.expenses);
+	}, []);
 
 	const renderItem = ({ item }: any) => (
 		<TouchableOpacity
@@ -47,6 +51,10 @@ const ManageSettingsScreen = () => {
 			</View>
 		</TouchableOpacity>
 	);
+
+	const onNewMonthPress = () => {
+		console.log(existingData);
+	};
 
 	return (
 		<View style={tw`${defaultStyle.topView}`}>
