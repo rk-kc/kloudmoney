@@ -33,6 +33,7 @@ setTimeout(SplashScreen.hideAsync, 5000);
 
 export default function App() {
 	const Stack = createNativeStackNavigator();
+
 	return (
 		<Provider store={store}>
 			<GluestackUIProvider config={config}>

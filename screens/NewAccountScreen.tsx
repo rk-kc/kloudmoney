@@ -16,18 +16,33 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 const NewAccountScreen = () => {
 	const [appleAuthAvailable, setAppleAuthAvailable] = useState(false);
 
-	const onAppleButtonPress = () => {
-		console.log('Save button pressed');
-	};
-
 	useEffect(() => {
 		loadAppleAuth();
-		console.log(appleAuthAvailable);
 	}, [appleAuthAvailable]);
 
 	const loadAppleAuth = async () => {
 		const appleAuthAvailable = await AppleAuthentication.isAvailableAsync();
 		setAppleAuthAvailable(appleAuthAvailable);
+	};
+
+	const loadAppleAccount = async () => {
+		try {
+			const appleAccount = await AppleAuthentication.signInAsync({
+				requestedScopes: [
+					AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+					AppleAuthentication.AppleAuthenticationScope.EMAIL,
+				],
+			});
+			console.log(appleAccount);
+		} catch (e: any) {
+			if (e.code === 'ERR_CANCELED') {
+				// user canceled Apple sign-in
+				console.log('User canceled Apple sign-in');
+			} else {
+				// other error
+				console.log(e);
+			}
+		}
 	};
 
 	return (
@@ -57,23 +72,7 @@ const NewAccountScreen = () => {
 								AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
 							}
 							cornerRadius={100}
-							onPress={async () => {
-								try {
-									const credential = await AppleAuthentication.signInAsync({
-										requestedScopes: [
-											AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-											AppleAuthentication.AppleAuthenticationScope.EMAIL,
-										],
-									});
-									// signed in
-								} catch (e: any) {
-									if (e.code === 'ERR_REQUEST_CANCELED') {
-										// handle that the user canceled the sign-in flow
-									} else {
-										// handle other errors
-									}
-								}
-							}}
+							onPress={loadAppleAccount}
 							style={tw`w-70 h-10`}
 						/>
 					)}
